@@ -5,8 +5,35 @@
 </p>
 </br>
 If you want Codex in your code editor (VS Code, Cursor, Windsurf), <a href="https://developers.openai.com/codex/ide">install in your IDE.</a>
-</br>If you want the desktop app experience, run <code>codex app</code> or visit <a href="https://chatgpt.com/codex?app-landing-page=true">the Codex App page</a>.
-</br>If you are looking for the <em>cloud-based agent</em> from OpenAI, <strong>Codex Web</strong>, go to <a href="https://chatgpt.com/codex">chatgpt.com/codex</a>.</p>
+</br>If you want the desktop app experience, run <code>codex app</code> or visit <a href="https://chatgpt.com/codex?ref=cli">chatgpt.com/codex</a>.</p>
+
+---
+
+## Fork Modifications
+
+This fork restores support for the **Chat Completions API** that was previously removed from the upstream Codex CLI. This enables compatibility with API providers that don't support the OpenAI Responses API (e.g., Tencent Cloud, Azure OpenAI with Chat endpoints).
+
+### Key Changes
+
+| Feature | Description |
+|---------|-------------|
+| **WireApi Enum** | Choose between `Responses`, `Chat`, or `Compact` API protocols |
+| **ChatClient** | New client for Chat Completions API streaming |
+| **Prompt Structure** | Unified prompt input for both Responses and Chat APIs |
+| **SSE Chat Processing** | Proper handling of Chat Completions SSE events |
+
+### Configuration
+
+To use the Chat API, configure your provider in `~/.codex/config.toml`:
+
+```toml
+[providers.custom]
+name = "custom"
+base_url = "https://api.example.com/v1"
+wire = "chat"  # Use Chat Completions API
+```
+
+See [codex-rs/README.md](./codex-rs/README.md) for detailed documentation.
 
 ---
 

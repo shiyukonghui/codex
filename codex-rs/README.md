@@ -2,6 +2,80 @@
 
 We provide Codex CLI as a standalone, native executable to ensure a zero-dependency install.
 
+## Fork Modifications
+
+This fork includes the following modifications to support additional API providers:
+
+### Chat Completions API Support
+
+The original Codex CLI only supports the OpenAI Responses API. This fork restores support for the **Chat Completions API** that was previously removed, enabling compatibility with providers that don't support the Responses API (e.g., Tencent Cloud, Azure OpenAI with Chat endpoints).
+
+#### Restored Features
+
+1. **WireApi Enum** - Choose between different API protocols:
+   - `Responses` - Default OpenAI Responses API
+   - `Chat` - Standard Chat Completions API
+   - `Compact` - Compaction endpoint
+
+2. **ChatClient** - A new client for Chat Completions API streaming:
+   ```rust
+   use codex_api::{ChatClient, ChatRequestBuilder, Prompt, Provider, WireApi};
+
+   let provider = Provider {
+       wire: WireApi::Chat,
+       // ... other configuration
+   };
+
+   let client = ChatClient::new(transport, provider, auth);
+   let stream = client.stream_prompt("gpt-4", &prompt).await?;
+   ```
+
+3. **Prompt Structure** - Unified prompt input for both APIs:
+   ```rust
+   pub struct Prompt {
+       pub instructions: String,
+       pub input: Vec<ResponseItem>,
+       pub tools: Vec<Value>,
+       pub parallel_tool_calls: bool,
+       pub output_schema: Option<Value>,
+   }
+   ```
+
+4. **SSE Chat Stream Processing** - Proper handling of Chat Completions SSE events:
+   - `[DONE]` sentinel handling
+   - Tool call concatenation across deltas
+   - Reasoning content support
+
+#### Configuration
+
+To use the Chat API, configure your provider:
+
+```toml
+[providers.custom]
+name = "custom"
+base_url = "https://api.example.com/v1"
+wire = "chat"  # Use Chat Completions API instead of Responses API
+```
+
+#### Files Modified/Added
+
+| File | Change |
+|------|--------|
+| `codex-api/src/provider.rs` | Added `WireApi` enum and `wire` field to `Provider` |
+| `codex-api/src/common.rs` | Added `Prompt` structure |
+| `codex-api/src/sse/chat.rs` | New: Chat SSE stream processing |
+| `codex-api/src/endpoint/streaming.rs` | New: `StreamingClient` implementation |
+| `codex-api/src/endpoint/chat_legacy.rs` | New: `ChatClient` and `AggregateStreamExt` |
+| `codex-api/src/requests/chat.rs` | New: `ChatRequest` and `ChatRequestBuilder` |
+| `codex-api/src/requests/chat_legacy.rs` | New: Legacy Chat request builder |
+| `codex-api/src/requests/headers.rs` | Added `conversation_id` header support |
+
+### Bug Fixes
+
+1. **Case-insensitive Azure URL detection** - Fixed `matches_azure_responses_base_url` to properly handle mixed-case URLs.
+
+---
+
 ## Installing Codex
 
 Today, the easiest way to install Codex is via `npm`:
