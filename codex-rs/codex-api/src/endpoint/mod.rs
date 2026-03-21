@@ -1,3 +1,5 @@
+mod streaming;
+pub mod chat_legacy;
 pub mod compact;
 pub mod memories;
 pub mod models;

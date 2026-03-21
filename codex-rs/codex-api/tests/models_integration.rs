@@ -2,6 +2,7 @@ use codex_api::AuthProvider;
 use codex_api::ModelsClient;
 use codex_api::provider::Provider;
 use codex_api::provider::RetryConfig;
+use codex_api::provider::WireApi;
 use codex_client::ReqwestTransport;
 use codex_protocol::config_types::ReasoningSummary;
 use codex_protocol::openai_models::ConfigShellToolType;
@@ -34,6 +35,7 @@ fn provider(base_url: &str) -> Provider {
         name: "test".to_string(),
         base_url: base_url.to_string(),
         query_params: None,
+        wire: WireApi::Responses,
         headers: HeaderMap::new(),
         retry: RetryConfig {
             max_attempts: 1,

@@ -7,6 +7,7 @@ use async_trait::async_trait;
 use bytes::Bytes;
 use codex_api::AuthProvider;
 use codex_api::Provider;
+use codex_api::WireApi;
 use codex_api::ResponsesApiRequest;
 use codex_api::ResponsesClient;
 use codex_api::ResponsesOptions;
@@ -125,6 +126,7 @@ fn provider(name: &str) -> Provider {
         name: name.to_string(),
         base_url: "https://example.com/v1".to_string(),
         query_params: None,
+        wire: WireApi::Responses,
         headers: HeaderMap::new(),
         retry: codex_api::provider::RetryConfig {
             max_attempts: 1,

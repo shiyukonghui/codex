@@ -14,6 +14,7 @@ use crate::endpoint::realtime_websocket::protocol::RealtimeTranscriptEntry;
 use crate::endpoint::realtime_websocket::protocol::parse_realtime_event;
 use crate::error::ApiError;
 use crate::provider::Provider;
+use crate::provider::WireApi;
 use codex_client::maybe_build_rustls_client_config_with_custom_ca;
 use codex_utils_rustls_provider::ensure_rustls_crypto_provider;
 use futures::SinkExt;
@@ -1244,6 +1245,7 @@ mod tests {
             name: "test".to_string(),
             base_url: format!("http://{addr}"),
             query_params: Some(HashMap::new()),
+            wire: WireApi::Responses,
             headers: HeaderMap::new(),
             retry: crate::provider::RetryConfig {
                 max_attempts: 1,
@@ -1517,6 +1519,7 @@ mod tests {
             name: "test".to_string(),
             base_url: format!("http://{addr}"),
             query_params: Some(HashMap::new()),
+            wire: WireApi::Responses,
             headers: HeaderMap::new(),
             retry: crate::provider::RetryConfig {
                 max_attempts: 1,
@@ -1621,6 +1624,7 @@ mod tests {
             name: "test".to_string(),
             base_url: format!("http://{addr}"),
             query_params: Some(HashMap::new()),
+            wire: WireApi::Responses,
             headers: HeaderMap::new(),
             retry: crate::provider::RetryConfig {
                 max_attempts: 1,
@@ -1723,6 +1727,7 @@ mod tests {
             name: "test".to_string(),
             base_url: format!("http://{addr}"),
             query_params: Some(HashMap::new()),
+            wire: WireApi::Responses,
             headers: HeaderMap::new(),
             retry: crate::provider::RetryConfig {
                 max_attempts: 1,
@@ -1811,6 +1816,7 @@ mod tests {
             name: "test".to_string(),
             base_url: format!("http://{addr}"),
             query_params: Some(HashMap::new()),
+            wire: WireApi::Responses,
             headers: HeaderMap::new(),
             retry: crate::provider::RetryConfig {
                 max_attempts: 1,

@@ -19,6 +19,21 @@ use tokio::sync::mpsc;
 pub const WS_REQUEST_HEADER_TRACEPARENT_CLIENT_METADATA_KEY: &str = "ws_request_header_traceparent";
 pub const WS_REQUEST_HEADER_TRACESTATE_CLIENT_METADATA_KEY: &str = "ws_request_header_tracestate";
 
+/// Canonical prompt input for Chat and Responses endpoints.
+#[derive(Debug, Clone)]
+pub struct Prompt {
+    /// Fully-resolved system instructions for this turn.
+    pub instructions: String,
+    /// Conversation history and user/tool messages.
+    pub input: Vec<ResponseItem>,
+    /// JSON-encoded tool definitions compatible with the target API.
+    pub tools: Vec<Value>,
+    /// Whether parallel tool calls are permitted.
+    pub parallel_tool_calls: bool,
+    /// Optional output schema used to build the `text.format` controls.
+    pub output_schema: Option<Value>,
+}
+
 /// Canonical input payload for the compaction endpoint.
 #[derive(Debug, Clone, Serialize)]
 pub struct CompactionInput<'a> {
