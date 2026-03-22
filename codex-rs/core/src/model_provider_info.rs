@@ -184,6 +184,9 @@ impl ModelProviderInfo {
             name: self.name.clone(),
             base_url,
             query_params: self.query_params.clone(),
+            wire: match self.wire_api {
+                WireApi::Responses => codex_api::provider::WireApi::Responses,
+            },
             headers,
             retry,
             stream_idle_timeout: self.stream_idle_timeout(),
